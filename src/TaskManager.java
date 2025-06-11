@@ -15,12 +15,17 @@ public class TaskManager {
         tasks.clear();
     }
 
-    public void removeTask(int id) {
-        tasks.remove(id);
+    public void removeTask(Task task) {
+        tasks.remove(task.hashCode());
     }
 
     public void showTasks() {
         System.out.println();
+        if (tasks.isEmpty()) {
+            System.out.println("Список пустой");
+        }
+
+        // Сортировка по статусам
         for (Task task : tasks.values()) {
             if (task.getStatus() == Status.NEW) System.out.println(task);
         }
@@ -35,5 +40,4 @@ public class TaskManager {
     public void addTask(Task task) {
         tasks.put(task.hashCode(), task);
     }
-
 }

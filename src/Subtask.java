@@ -1,5 +1,5 @@
 public class Subtask extends Task {
-    private int epicID;
+    private final int epicID;
 
     public Subtask(String title, String description, Status status, int epicID) {
         super(title, description, status);
@@ -14,11 +14,7 @@ public class Subtask extends Task {
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 ", status=" + status +
+                ", id=" + this.hashCode() +
                 '}';
-    }
-
-    @Override
-    public void updateStatus(Status newStatus) {
-        System.out.println("Работа с подзадачами осуществляется через Epic");
     }
 }

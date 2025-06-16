@@ -1,19 +1,44 @@
+package ru.yandex.javacourse.tasks;
+
 import java.util.Objects;
 
 public class Task {
-    protected String title;
-    protected String description;
-    protected Status status;
-
+    private String title;
+    private String description;
+    private Status status;
+    private static int count = 0;
+    private final int id;
 
     public Task(String title, String description, Status status) {
         this.title = title;
         this.description = description;
         this.status = status;
+        id = count++;
     }
 
+    public String getTitle() {
+        return title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public int getId() {
+        return id;
+    }
     public Status getStatus() {
         return status;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+    public void setDescription(String description) {
+        this.description = description;
+    }
+    public void setStatus(Status status) {
+        this.status = status;
     }
 
     @Override
@@ -33,16 +58,15 @@ public class Task {
     public String toString() {
         String descriptionLength = "null";
         if (description != null) descriptionLength = String.valueOf(description.length());
-        return "Task{" +
+        return "ru.yandex.javacourse.tasks.Task{" +
                 "title='" + title + '\'' +
                 ", description.length()=" + descriptionLength +
                 ", status=" + status +
-                ", id=" + this.hashCode() +
+                ", id=" + getId() +
                 '}';
     }
 
     public void updateStatus(Status newStatus) {
         status = newStatus;
     }
-
 }

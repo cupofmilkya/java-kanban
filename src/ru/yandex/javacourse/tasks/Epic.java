@@ -1,16 +1,17 @@
 package ru.yandex.javacourse.tasks;
-import ru.yandex.javacourse.manager.TaskManager;
+import ru.yandex.javacourse.manager.InMemoryTaskManager;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class Epic extends Task{
     private ArrayList<Integer> subtasksIDs;
-    private final TaskManager taskManager;
+    private final InMemoryTaskManager inMemoryTaskManager;
 
-    public Epic(String title, String description, ArrayList<Integer> subtasksIDs, TaskManager taskManager) {
+    public Epic(String title, String description, ArrayList<Integer> subtasksIDs, InMemoryTaskManager inMemoryTaskManager) {
         super(title, description, Status.NEW);
         this.subtasksIDs = subtasksIDs;
-        this.taskManager = taskManager;
+        this.inMemoryTaskManager = inMemoryTaskManager;
         updateStatus();
     }
 
@@ -29,10 +30,23 @@ public class Epic extends Task{
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Task task = (Task) o;
+        return Objects.equals(super.getId(), task.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.getId());
+    }
+
+    @Override
     public String toString() {
         String descriptionLength = "null";
         if (super.getDescription() != null) descriptionLength = String.valueOf(super.getDescription().length());
-        return "ru.yandex.javacourse.tasks.Epic{" +
+        return "Epic{" +
                 "title='" + super.getTitle() + '\'' +
                 ", description.length()=" + descriptionLength +
                 ", status=" + super.getStatus() + ", " +
@@ -48,7 +62,7 @@ public class Epic extends Task{
     }
 
     public void updateSubtaskStatus(int subtaskId, Status newStatus) {
-        for (Task task : taskManager.getSubtasks()) {
+        for (Task task : inMemoryTaskManager.getSubtasks()) {
             if (task.getId() == subtaskId) {
                 task.updateStatus(newStatus);
                 break;
@@ -71,7 +85,7 @@ public class Epic extends Task{
         int doneCount = 0;
 
         for (int subtask : subtasksIDs) {
-            for (Subtask task : taskManager.getSubtasks()) {
+            for (Subtask task : inMemoryTaskManager.getSubtasks()) {
                 if (!(task.getId() == subtask)) continue;
 
                 if (task.getStatus() == Status.NEW) newCount++;

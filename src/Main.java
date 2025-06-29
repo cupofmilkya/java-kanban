@@ -1,4 +1,5 @@
-import ru.yandex.javacourse.manager.TaskManager;
+import ru.yandex.javacourse.manager.InMemoryTaskManager;
+import ru.yandex.javacourse.manager.Managers;
 import ru.yandex.javacourse.tasks.*;
 
 import java.util.ArrayList;
@@ -6,47 +7,58 @@ import java.util.ArrayList;
 public class Main {
 
     public static void main(String[] args) {
-        TaskManager taskManager = new TaskManager();
+        InMemoryTaskManager inMemoryTaskManager = (InMemoryTaskManager) Managers.getDefault();
 
-        // Создаем две задачи
-        taskManager.addTask(new Task("Задача 1", "Вот такая задача", Status.NEW));
+        // Создаем три задачи
+        inMemoryTaskManager.addTask(new Task("Задача 1", "Вот такая задача", Status.NEW));
 
-        Task task = new Task("Задача 2", "Вот такая вторая задача", Status.IN_PROGRESS);
-        taskManager.addTask(task);
+        Task task2 = new Task("Задача 2", "Вот такая вторая задача", Status.IN_PROGRESS);
+        inMemoryTaskManager.addTask(task2);
 
-        // Создаем Эпик с двумя подзадачами
-        Epic testEpic = new Epic("Задача Epic", "Вот такая задача",
-                new ArrayList<>(), taskManager);
-        ArrayList<Subtask> subtasks = new ArrayList<>();
-        subtasks.add(new Subtask("Подзадача 1", "Вот такая задача", Status.NEW, testEpic.getId()));
-        taskManager.addSubtasks(subtasks);
+        Task task3 = new Task("Задача 3", "Вот такая третья задача", Status.DONE);
+        inMemoryTaskManager.addTask(task3);
 
-        for (Subtask subtask : subtasks) {
-            testEpic.addSubtask(subtask.getId());
+        // Создаем эпик и сабтаски
+        Epic epic = new Epic("Задача Эпик", "Вот такой эпик", new ArrayList<>(), inMemoryTaskManager);
+        Subtask subtask1 = new Subtask("Задача сабтаск1", "Вот такой первый сабтаск", Status.NEW,
+                epic.getId());
+        Subtask subtask2 = new Subtask("Задача сабтаск2", "Вот такой второой сабтаск", Status.NEW,
+                epic.getId());
+
+        epic.addSubtask(subtask1.getId());
+        epic.addSubtask(subtask2.getId());
+        inMemoryTaskManager.addTask(epic);
+        inMemoryTaskManager.addTask(subtask1);
+        inMemoryTaskManager.addTask(subtask2);
+
+
+        // Используем геттеры и выводим таски
+        System.out.println("Задачи:");
+        for (Task taskDefault : inMemoryTaskManager.getTasks()) {
+            System.out.println(taskDefault);
+        }
+        System.out.println("Эпики:");
+        for (Epic taskEpic : inMemoryTaskManager.getEpics()) {
+            System.out.println(taskEpic);
+
+            System.out.println("  Подзадачи Эпика:");
+            for (Subtask task : inMemoryTaskManager.getEpicSubtasks(epic.getId())) {
+                System.out.println("  --> " + task);
+            }
         }
 
-        Subtask subtask = new Subtask("Подзадача 2", "Вот такая задача",
-                Status.NEW, testEpic.getId());
-
-        testEpic.addSubtask(subtask.getId());
-        taskManager.addTask(subtask);
-
-        taskManager.addTask(testEpic);
-        taskManager.showTasks();
-
-        // Обновляем статусы
-        task.updateStatus(Status.DONE);
-        for (int subtaskID : testEpic.getSubtasksIDs()) {
-            testEpic.updateSubtaskStatus(subtaskID, Status.DONE);
+        System.out.println("Подзадачи:");
+        for (Task subtask : inMemoryTaskManager.getSubtasks()) {
+            System.out.println(subtask);
         }
-        taskManager.showTasks();
 
-        // Удаляем Эпик
-        taskManager.removeTask(testEpic.getId());
-        taskManager.showTasks();
-
-        // Удаляем все Эпики
-        taskManager.removeAllTasks();
-        taskManager.showTasks();
+        // Проверка истории
+        System.out.println();
+        System.out.println("/////////////////////");
+        System.out.println("История");
+        ArrayList<Task> tasks = inMemoryTaskManager.getInMemoryHistory();
+        for (Task task : tasks) {
+            System.out.println(task);
+        }
     }
 }

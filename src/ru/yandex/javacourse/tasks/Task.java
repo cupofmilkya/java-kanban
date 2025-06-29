@@ -46,19 +46,19 @@ public class Task {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Task task = (Task) o;
-        return Objects.equals(title, task.title) && Objects.equals(description, task.description);
+        return Objects.equals(id, task.getId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(title, description);
+        return Objects.hash(getId());
     }
 
     @Override
     public String toString() {
         String descriptionLength = "null";
         if (description != null) descriptionLength = String.valueOf(description.length());
-        return "ru.yandex.javacourse.tasks.Task{" +
+        return "Task{" +
                 "title='" + title + '\'' +
                 ", description.length()=" + descriptionLength +
                 ", status=" + status +

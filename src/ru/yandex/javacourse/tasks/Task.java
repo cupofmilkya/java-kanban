@@ -16,6 +16,14 @@ public class Task {
         id = count++;
     }
 
+    public Task(String title, String description, Status status, int id) {
+        this.title = title;
+        this.description = description;
+        this.status = status;
+        this.id = id;
+        count = id + 1;
+    }
+
     public String getTitle() {
         return title;
     }

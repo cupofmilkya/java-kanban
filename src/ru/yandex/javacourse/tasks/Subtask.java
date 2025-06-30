@@ -3,11 +3,23 @@ package ru.yandex.javacourse.tasks;
 import java.util.Objects;
 
 public class Subtask extends Task {
-    private final int epicID;
+    private int epicID = -1;
 
     public Subtask(String title, String description, Status status, int epicID) {
         super(title, description, status);
-        this.epicID = epicID;
+        if (epicID != this.getId()) {
+            this.epicID = epicID;
+        }
+    }
+
+    public Subtask(String title, String description, Status status) {
+        super(title, description, status);
+    }
+
+    public void setEpicID(int epicID) {
+        if (epicID != this.getId()) {
+            this.epicID = epicID;
+        }
     }
 
     @Override
@@ -34,5 +46,9 @@ public class Subtask extends Task {
                 ", status=" + super.getStatus() +
                 ", id=" + super.getId() +
                 '}';
+    }
+
+    public int getEpicID() {
+        return epicID;
     }
 }

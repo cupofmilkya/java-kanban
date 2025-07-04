@@ -19,6 +19,12 @@ public class Epic extends Task{
         return subtasksIDs;
     }
 
+    @Override
+    public Status getStatus() {
+        updateStatus();
+        return super.getStatus();
+    }
+
     public void setSubtasks(ArrayList<Integer> subtasksIDs) {
         this.subtasksIDs = subtasksIDs;
         updateStatus();
@@ -65,7 +71,7 @@ public class Epic extends Task{
 
     @Override
     public void updateStatus(Status newStatus) {
-        System.out.println("В ru.yandex.javacourse.tasks.Epic нельзя обновить статус, работайте с ru.yandex.javacourse.tasks.Subtask");
+        System.out.println("В Epic нельзя обновить статус, работайте с Subtask");
         System.out.println("Подзадачи: " + subtasksIDs.toString());
     }
 
@@ -91,6 +97,11 @@ public class Epic extends Task{
     private void updateStatus(){
         int newCount = 0;
         int doneCount = 0;
+
+        if (subtasksIDs == null || subtasksIDs.isEmpty()) {
+            super.setStatus(Status.NEW);
+            return;
+        }
 
         for (int subtask : subtasksIDs) {
             for (Subtask task : inMemoryTaskManager.getSubtasks()) {

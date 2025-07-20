@@ -1,6 +1,6 @@
 package ru.yandex.javacourse.collections;
 
-public class Node <T> {
+public class Node<T> {
     private Node next;
     private Node prev;
     private T value;

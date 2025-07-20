@@ -1,4 +1,5 @@
 package ru.yandex.javacourse.manager;
+
 import ru.yandex.javacourse.collections.LinkedListOfTasks;
 import ru.yandex.javacourse.tasks.*;
 
@@ -8,7 +9,7 @@ import java.util.Set;
 
 
 public class InMemoryTaskManager implements TaskManager {
-    private final  HashMap<Integer, Task> tasks;
+    private final HashMap<Integer, Task> tasks;
     final HistoryManager historyManager;
 
     public InMemoryTaskManager(HistoryManager historyManager) {
@@ -57,7 +58,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public ArrayList<Subtask> getEpicSubtasks(int epicId) {
-        if(!(tasks.get(epicId) instanceof Epic epic)) return null;
+        if (!(tasks.get(epicId) instanceof Epic epic)) return null;
 
         ArrayList<Subtask> subtasks = new ArrayList<>();
 

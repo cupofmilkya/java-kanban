@@ -12,12 +12,18 @@ public interface TaskManager {
 
 
     Task getTask(int id);
+
     ArrayList<Task> getTasks();
+
     ArrayList<Epic> getEpics();
+
     ArrayList<Subtask> getEpicSubtasks(int epicId);
+
     ArrayList<Subtask> getSubtasks();
 
+
     void removeAllTasks();
+
     void removeTask(int taskToRemove);
 
     void showTasks();

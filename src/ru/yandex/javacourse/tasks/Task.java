@@ -35,6 +35,7 @@ public class Task {
     public int getId() {
         return id;
     }
+
     public Status getStatus() {
         return status;
     }
@@ -42,9 +43,11 @@ public class Task {
     public void setTitle(String title) {
         this.title = title;
     }
+
     public void setDescription(String description) {
         this.description = description;
     }
+
     public void setStatus(Status status) {
         this.status = status;
     }

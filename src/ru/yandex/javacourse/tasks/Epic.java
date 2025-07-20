@@ -1,10 +1,11 @@
 package ru.yandex.javacourse.tasks;
+
 import ru.yandex.javacourse.manager.InMemoryTaskManager;
 
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class Epic extends Task{
+public class Epic extends Task {
     private ArrayList<Integer> subtasksIDs;
     private final InMemoryTaskManager inMemoryTaskManager;
 
@@ -35,7 +36,7 @@ public class Epic extends Task{
         if (subtasksIDs.contains(subtaskID)) return;
 
         for (Task task : inMemoryTaskManager.getTasks()) {
-            if(subtaskID == task.getId() && !(task instanceof Subtask)) {
+            if (subtaskID == task.getId() && !(task instanceof Subtask)) {
                 return;
             }
         }
@@ -94,7 +95,7 @@ public class Epic extends Task{
         System.out.println();
     }
 
-    private void updateStatus(){
+    private void updateStatus() {
         int newCount = 0;
         int doneCount = 0;
 

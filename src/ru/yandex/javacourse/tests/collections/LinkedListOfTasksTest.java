@@ -20,10 +20,10 @@ public class LinkedListOfTasksTest {
 
     @Test
     @DisplayName("Проверка корректной работы структуры данных")
-    public void correctWorkLinkedListOfTasksTest(){
+    public void correctWorkLinkedListOfTasksTest() {
         Task task1 = new Task("Task2", "Task description", Status.NEW);
-        Task task2 =  new Task("Task2", "Task description", Status.NEW);
-        Task task3 =  new Task("Task3", "Task description", Status.NEW);
+        Task task2 = new Task("Task2", "Task description", Status.NEW);
+        Task task3 = new Task("Task3", "Task description", Status.NEW);
 
         linkedListOfTasks.add(task1);
         linkedListOfTasks.add(task2);
@@ -35,7 +35,7 @@ public class LinkedListOfTasksTest {
 
     @Test
     @DisplayName("Проверка корректной работы структуры данных")
-    public void correctWorkOfRemove_LinkedListOfTasksTest(){
+    public void correctWorkOfRemove_LinkedListOfTasksTest() {
         Task task1 = new Task("Task2", "Task description", Status.NEW);
 
         linkedListOfTasks.add(task1);

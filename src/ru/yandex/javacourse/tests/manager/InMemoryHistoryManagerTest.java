@@ -11,7 +11,6 @@ import ru.yandex.javacourse.tasks.Status;
 import ru.yandex.javacourse.tasks.Task;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 public class InMemoryHistoryManagerTest {
     private InMemoryTaskManager inMemoryTaskManager;

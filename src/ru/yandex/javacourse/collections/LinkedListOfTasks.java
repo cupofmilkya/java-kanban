@@ -16,21 +16,23 @@ public class LinkedListOfTasks {
     }
 
     public boolean add(Task t) {
-        if (contains(t) || t == null) {
+        if (nodes.containsKey(t.getId()) || t == null) {
             return false;
         }
 
+        Task commonTask = new Task(t.getTitle(), t.getDescription(), t.getStatus(), t.getId());
+
         if (head == null) {
             tail = head = new Node<Task>(t, null, null);
-            nodes.put(t.getId(), head);
+            nodes.put(commonTask.getId(), head);
             return true;
         }
 
-        Node<Task> common = new Node<Task>(t, tail, null);
+        Node<Task> common = new Node<Task>(commonTask, tail, null);
         tail.setNext(common);
         tail = common;
 
-        nodes.put(t.getId(), common);
+        nodes.put(commonTask.getId(), common);
         return true;
     }
 

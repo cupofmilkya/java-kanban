@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 public class ManagersTest {
     @Test
     @DisplayName("Проверка на возвращаемый стандартный тип")
-    public void ManagersGetDefaultNotNullTest() {
+    public void managersGetDefaultNotNullTest() {
         assertNotNull(Managers.getDefault());
         assertNotNull(Managers.getDefaultHistory());
     }

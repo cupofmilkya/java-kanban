@@ -1,8 +1,11 @@
+import ru.yandex.javacourse.collections.Node;
 import ru.yandex.javacourse.manager.InMemoryTaskManager;
 import ru.yandex.javacourse.manager.Managers;
 import ru.yandex.javacourse.tasks.*;
 
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.Set;
 
 public class Main {
 
@@ -56,9 +59,9 @@ public class Main {
         System.out.println();
         System.out.println("/////////////////////");
         System.out.println("История");
-        ArrayList<Task> tasks = inMemoryTaskManager.getInMemoryHistory();
-        for (Task task : tasks) {
-            System.out.println(task);
+        Map<Integer, Node<Task>> nodes = inMemoryTaskManager.getInMemoryHistory().getNodes();
+        for (Node<Task> node : nodes.values()) {
+            System.out.println(node.getValue());
         }
     }
 }

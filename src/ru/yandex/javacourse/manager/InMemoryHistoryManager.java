@@ -1,28 +1,35 @@
 package ru.yandex.javacourse.manager;
 
+import ru.yandex.javacourse.collections.LinkedListOfTasks;
 import ru.yandex.javacourse.tasks.Task;
 
-import java.util.ArrayList;
-
 public class InMemoryHistoryManager implements HistoryManager {
-    private final ArrayList<Task> history;
-    private final static int HISTORY_SIZE = 10;
+
+    private final LinkedListOfTasks history;
 
     public InMemoryHistoryManager() {
-        history = new ArrayList<>();
+        history = new LinkedListOfTasks();
     }
 
     @Override
-    public ArrayList<Task> getHistory() {
+    public LinkedListOfTasks getHistory() {
         return history;
     }
 
     @Override
     public void add(Task task) {
-        Task common = new Task(task.getTitle(), task.getDescription(), task.getStatus(), task.getId());
-        if (history.size() >= HISTORY_SIZE) {
-            history.removeFirst();
+
+        if (!history.add(task)) {
+            history.remove(task.getId());
         }
-        history.add(common);
+
+        history.add(task);
     }
+
+    @Override
+    public void remove(int id){
+        history.remove(id);
+    }
+
+
 }

@@ -3,13 +3,14 @@ package manager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
+import ru.yandex.javacourse.collections.LinkedListOfTasks;
 import ru.yandex.javacourse.manager.InMemoryTaskManager;
 import ru.yandex.javacourse.manager.Managers;
 import ru.yandex.javacourse.tasks.Status;
 import ru.yandex.javacourse.tasks.Task;
 
-import java.util.ArrayList;
-
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 public class InMemoryHistoryManagerTest {
@@ -21,15 +22,17 @@ public class InMemoryHistoryManagerTest {
     }
 
     @Test
-    @DisplayName("Проверка на сохранение конкретного состояния объекта в InMemoryHistoryManager")
-    public void tasksAddedToHistoryManagerSavePreviousVersionTest() {
+    @DisplayName("Проверка на неналичие повторных просмотров в истории InMemoryHistoryManager")
+    public void taskMustNotBeSaved_moreThanOnce_Test() {
         Task task = new Task("Task", "Task description", Status.NEW);
         inMemoryTaskManager.addTask(task);
 
         inMemoryTaskManager.getTask(task.getId());
-        task.updateStatus(Status.DONE);
-        ArrayList<Task> tasks = inMemoryTaskManager.getInMemoryHistory();
+        inMemoryTaskManager.getTask(task.getId());
+        inMemoryTaskManager.getTask(task.getId());
 
-        assertNotEquals(task.getStatus(), tasks.getFirst().getStatus());
+        LinkedListOfTasks tasks = inMemoryTaskManager.getInMemoryHistory();
+
+        assertEquals(1, tasks.size());
     }
 }

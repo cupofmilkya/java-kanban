@@ -1,8 +1,10 @@
 package ru.yandex.javacourse.manager;
+import ru.yandex.javacourse.collections.LinkedListOfTasks;
 import ru.yandex.javacourse.tasks.*;
 
 import java.util.HashMap;
 import java.util.ArrayList;
+import java.util.Set;
 
 
 public class InMemoryTaskManager implements TaskManager {
@@ -135,7 +137,7 @@ public class InMemoryTaskManager implements TaskManager {
         }
     }
 
-    public ArrayList<Task> getInMemoryHistory() {
+    public LinkedListOfTasks getInMemoryHistory() {
         return historyManager.getHistory();
     }
 }

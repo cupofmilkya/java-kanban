@@ -5,7 +5,6 @@ import ru.yandex.javacourse.tasks.*;
 
 import java.util.HashMap;
 import java.util.ArrayList;
-import java.util.Set;
 
 
 public class InMemoryTaskManager implements TaskManager {

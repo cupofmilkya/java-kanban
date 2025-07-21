@@ -2,6 +2,7 @@ package ru.yandex.javacourse.collections;
 
 import ru.yandex.javacourse.tasks.Task;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,51 +29,38 @@ public class LinkedListOfTasks {
             return true;
         }
 
+        linkLast(commonTask);
+        return true;
+    }
+
+    public void linkLast(Task t) {
+        Task commonTask = new Task(t.getTitle(), t.getDescription(), t.getStatus(), t.getId());
+
         Node<Task> common = new Node<Task>(commonTask, tail, null);
         tail.setNext(common);
         tail = common;
 
         nodes.put(commonTask.getId(), common);
-        return true;
     }
 
-    public void remove(int id) {
-        if (!nodes.containsKey(id)) {
+    public void removeNode(Node<Task> node) {
+        if (!nodes.containsValue(node)) {
             return;
         }
 
-        Node<Task> nodeToRemove = nodes.get(id);
-
-        if (nodeToRemove.getPrev() != null) {
-            nodeToRemove.getPrev().setNext(nodeToRemove.getNext());
+        if (node.getPrev() != null) {
+            node.getPrev().setNext(node.getNext());
         } else {
-            head = nodeToRemove.getNext();
+            head = node.getNext();
         }
 
-        if (nodeToRemove.getNext() != null) {
-            nodeToRemove.getNext().setPrev(nodeToRemove.getPrev());
+        if (node.getNext() != null) {
+            node.getNext().setPrev(node.getPrev());
         } else {
-            tail = nodeToRemove.getPrev();
+            tail = node.getPrev();
         }
 
-        nodes.remove(id);
-    }
-
-    public boolean isEmpty() {
-        return nodes.isEmpty();
-    }
-
-    public int size() {
-        return nodes.size();
-    }
-
-    public boolean contains(Object o) {
-        if (!(o instanceof Task)) {
-            return false;
-        }
-
-        Task t = (Task) o;
-        return nodes.containsKey(t.getId());
+        nodes.remove(node);
     }
 
     public Task getTask(int id) {
@@ -82,7 +70,15 @@ public class LinkedListOfTasks {
         return nodes.get(id).getValue();
     }
 
-    public Map<Integer, Node<Task>> getNodes() {
-        return nodes;
+    public ArrayList<Task> getTasks() {
+        ArrayList<Task> tasks = new ArrayList<>();
+        Node<Task> current = head;
+
+        while (current != null) {
+            tasks.add(current.getValue());
+            current = current.getNext();
+        }
+
+        return tasks;
     }
 }

@@ -1,4 +1,5 @@
 import ru.yandex.javacourse.collections.Node;
+import ru.yandex.javacourse.manager.InMemoryHistoryManager;
 import ru.yandex.javacourse.manager.InMemoryTaskManager;
 import ru.yandex.javacourse.manager.Managers;
 import ru.yandex.javacourse.tasks.*;
@@ -58,9 +59,10 @@ public class Main {
         System.out.println();
         System.out.println("/////////////////////");
         System.out.println("История");
-        Map<Integer, Node<Task>> nodes = inMemoryTaskManager.getInMemoryHistory().getNodes();
-        for (Node<Task> node : nodes.values()) {
-            System.out.println(node.getValue());
+        InMemoryHistoryManager inMemoryHistoryManager = (InMemoryHistoryManager) inMemoryTaskManager.getInMemoryHistory();
+        ArrayList<Task> tasks = inMemoryHistoryManager.getTasks();
+        for (Task task : tasks) {
+            System.out.println(task);
         }
     }
 }

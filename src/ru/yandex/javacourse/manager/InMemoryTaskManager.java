@@ -137,7 +137,7 @@ public class InMemoryTaskManager implements TaskManager {
         }
     }
 
-    public LinkedListOfTasks getInMemoryHistory() {
-        return historyManager.getHistory();
+    public HistoryManager getInMemoryHistory() {
+        return historyManager;
     }
 }

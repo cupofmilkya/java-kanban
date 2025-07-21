@@ -1,11 +1,9 @@
-import ru.yandex.javacourse.collections.Node;
 import ru.yandex.javacourse.manager.InMemoryHistoryManager;
 import ru.yandex.javacourse.manager.InMemoryTaskManager;
 import ru.yandex.javacourse.manager.Managers;
 import ru.yandex.javacourse.tasks.*;
 
 import java.util.ArrayList;
-import java.util.Map;
 
 public class Main {
 

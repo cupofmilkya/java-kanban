@@ -1,6 +1,5 @@
 package ru.yandex.javacourse.manager;
 
-import ru.yandex.javacourse.collections.LinkedListOfTasks;
 import ru.yandex.javacourse.tasks.Task;
 
 import java.util.ArrayList;

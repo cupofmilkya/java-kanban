@@ -1,3 +1,4 @@
+import ru.yandex.javacourse.manager.InMemoryHistoryManager;
 import ru.yandex.javacourse.manager.InMemoryTaskManager;
 import ru.yandex.javacourse.manager.Managers;
 import ru.yandex.javacourse.tasks.*;
@@ -56,7 +57,8 @@ public class Main {
         System.out.println();
         System.out.println("/////////////////////");
         System.out.println("История");
-        ArrayList<Task> tasks = inMemoryTaskManager.getInMemoryHistory();
+        InMemoryHistoryManager inMemoryHistoryManager = (InMemoryHistoryManager) inMemoryTaskManager.getInMemoryHistory();
+        ArrayList<Task> tasks = inMemoryHistoryManager.getTasks();
         for (Task task : tasks) {
             System.out.println(task);
         }

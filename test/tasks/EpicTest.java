@@ -8,7 +8,6 @@ import ru.yandex.javacourse.manager.Managers;
 import ru.yandex.javacourse.tasks.Epic;
 import ru.yandex.javacourse.tasks.Status;
 import ru.yandex.javacourse.tasks.Subtask;
-import ru.yandex.javacourse.tasks.Task;
 
 import java.util.ArrayList;
 
@@ -25,7 +24,7 @@ public class EpicTest {
 
     @Test
     @DisplayName("Проверка работы получения статуса Эпика при обновлении статусов его сабтасков")
-    public void EpicUpdateStatusTest() {
+    public void epicUpdateStatusTest() {
         Epic epic = new Epic("Epic1", "Epic description", new ArrayList<Integer>(), inMemoryTaskManager);
         Subtask subtask = new Subtask("Subtask", "Subtask description", Status.NEW, epic.getId());
         Subtask subtask1 = new Subtask("Subtask", "Subtask description", Status.NEW, epic.getId());
@@ -50,7 +49,7 @@ public class EpicTest {
 
     @Test
     @DisplayName("Проверка работы получения статуса Эпика при обновлении статусов его сабтасков")
-    public void EpicAddSubtaskTest() {
+    public void epicAddSubtaskTest() {
         Epic epic = new Epic("Epic", "Epic description", new ArrayList<Integer>(), inMemoryTaskManager);
         Subtask subtask = new Subtask("Subtask", "Subtask description", Status.NEW, epic.getId());
         epic.addSubtask(subtask.getId());

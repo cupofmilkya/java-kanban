@@ -1,5 +1,4 @@
 import ru.yandex.javacourse.manager.FileBackedTaskManager;
-import ru.yandex.javacourse.manager.Managers;
 import ru.yandex.javacourse.tasks.*;
 
 import java.io.IOException;
@@ -26,8 +25,7 @@ public class Main {
             return;
         }
 
-        FileBackedTaskManager fileBackedTaskManager = (FileBackedTaskManager) Managers.getDefaultFileManager();
-        fileBackedTaskManager.loadFromFile(tempFile.toFile().getAbsoluteFile());
+        FileBackedTaskManager fileBackedTaskManager = FileBackedTaskManager.loadFromFile(tempFile.toFile());
 
         System.out.println("Задачи:");
         for (Task taskDefault : fileBackedTaskManager.getTasks()) {

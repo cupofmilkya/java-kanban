@@ -18,6 +18,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     public FileBackedTaskManager(HistoryManager historyManager, String filePath) {
         super(historyManager);
         this.filePath = filePath;
+        load(filePath);
     }
 
     public void setFilePath(String filePath) {
@@ -66,7 +67,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
     private void save() throws ManagerSaveException {
         if (filePath == null) {
-            System.out.println("Сохранение невозможно, нет пути для файла");
+            throw new ManagerSaveException("Сохранение невозможно, нет пути для файла");
         }
         try (FileWriter writer = new FileWriter(filePath)) {
             List<Task> tasksToWrite = new ArrayList<Task>(getTasks());
@@ -76,7 +77,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
             }
         } catch (IOException e) {
             System.out.println("Ошибка при записи в файл: " + e.getMessage());
-            throw new ManagerSaveException(e.getMessage());
+            throw new ManagerSaveException("Ошибка при записи в файл: " + e.getMessage());
         }
     }
 
@@ -106,7 +107,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         }
     }
 
-    public void loadFromFile(File file) {
-        load(file.getAbsolutePath());
+    public static FileBackedTaskManager loadFromFile(File file) {
+        return new FileBackedTaskManager(Managers.getDefaultHistory(), file.getPath());
     }
 }

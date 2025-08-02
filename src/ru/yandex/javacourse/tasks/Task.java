@@ -52,6 +52,16 @@ public class Task {
         this.status = status;
     }
 
+    public TaskType getType() {
+        if (this instanceof Subtask) {
+            return TaskType.SUBTASK;
+        } else if (this instanceof Epic) {
+            return TaskType.EPIC;
+        } else {
+            return TaskType.TASK;
+        }
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -62,19 +72,16 @@ public class Task {
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId());
+        return getId();
     }
 
     @Override
     public String toString() {
-        String descriptionLength = "null";
-        if (description != null) descriptionLength = String.valueOf(description.length());
-        return "Task{" +
-                "title='" + title + '\'' +
-                ", description.length()=" + descriptionLength +
-                ", status=" + status +
-                ", id=" + getId() +
-                '}';
+        return getId() +
+                "," + getType() +
+                "," + getTitle() +
+                "," + getStatus() +
+                "," + getDescription();
     }
 
     public void updateStatus(Status newStatus) {

@@ -1,18 +1,26 @@
 package ru.yandex.javacourse.tasks;
 
-import ru.yandex.javacourse.manager.InMemoryTaskManager;
+import ru.yandex.javacourse.manager.TaskManager;
 
 import java.util.ArrayList;
 import java.util.Objects;
 
 public class Epic extends Task {
     private ArrayList<Integer> subtasksIDs;
-    private final InMemoryTaskManager inMemoryTaskManager;
+    private TaskManager taskManager;
 
-    public Epic(String title, String description, ArrayList<Integer> subtasksIDs, InMemoryTaskManager inMemoryTaskManager) {
+    public Epic(String title, String description, ArrayList<Integer> subtasksIDs,
+                TaskManager taskManager) {
         super(title, description, Status.NEW);
         this.subtasksIDs = subtasksIDs;
-        this.inMemoryTaskManager = inMemoryTaskManager;
+        this.taskManager = taskManager;
+        updateStatus();
+    }
+
+    public Epic(String title, String description, ArrayList<Integer> subtasksIDs,
+                int id) {
+        super(title, description, Status.NEW, id);
+        this.subtasksIDs = subtasksIDs;
         updateStatus();
     }
 
@@ -26,6 +34,10 @@ public class Epic extends Task {
         return super.getStatus();
     }
 
+    public void setTaskManager(TaskManager taskManager) {
+        this.taskManager = taskManager;
+    }
+
     public void setSubtasks(ArrayList<Integer> subtasksIDs) {
         this.subtasksIDs = subtasksIDs;
         updateStatus();
@@ -35,7 +47,7 @@ public class Epic extends Task {
         if (subtaskID == this.getId()) return;
         if (subtasksIDs.contains(subtaskID)) return;
 
-        for (Task task : inMemoryTaskManager.getTasks()) {
+        for (Task task : taskManager.getTasks()) {
             if (subtaskID == task.getId() && !(task instanceof Subtask)) {
                 return;
             }
@@ -53,21 +65,12 @@ public class Epic extends Task {
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(super.getId());
-    }
-
-    @Override
     public String toString() {
-        String descriptionLength = "null";
-        if (super.getDescription() != null) descriptionLength = String.valueOf(super.getDescription().length());
-        return "Epic{" +
-                "title='" + super.getTitle() + '\'' +
-                ", description.length()=" + descriptionLength +
-                ", status=" + super.getStatus() + ", " +
-                "subtasks=" + subtasksIDs +
-                ", id=" + super.getId() +
-                '}';
+        return getId() +
+                "," + getType() +
+                "," + getTitle() +
+                "," + getStatus() +
+                "," + getDescription();
     }
 
     @Override
@@ -77,7 +80,7 @@ public class Epic extends Task {
     }
 
     public void updateSubtaskStatus(int subtaskId, Status newStatus) {
-        for (Task task : inMemoryTaskManager.getSubtasks()) {
+        for (Task task : taskManager.getSubtasks()) {
             if (task.getId() == subtaskId) {
                 task.updateStatus(newStatus);
                 break;
@@ -105,7 +108,7 @@ public class Epic extends Task {
         }
 
         for (int subtask : subtasksIDs) {
-            for (Subtask task : inMemoryTaskManager.getSubtasks()) {
+            for (Subtask task : taskManager.getSubtasks()) {
                 if (!(task.getId() == subtask)) continue;
 
                 if (task.getStatus() == Status.NEW) newCount++;

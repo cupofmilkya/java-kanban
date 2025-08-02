@@ -7,8 +7,20 @@ public class Subtask extends Task {
 
     public Subtask(String title, String description, Status status, int epicID) {
         super(title, description, status);
+
         if (epicID != this.getId()) {
             this.epicID = epicID;
+        } else {
+            throw new IllegalArgumentException("EpicID is already set to this id");
+        }
+    }
+
+    public Subtask(String title, String description, Status status, int epicID, int id) {
+        super(title, description, status, id);
+        if (epicID != this.getId()) {
+            this.epicID = epicID;
+        } else {
+            throw new IllegalArgumentException("EpicID is already set to this id");
         }
     }
 
@@ -31,21 +43,13 @@ public class Subtask extends Task {
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(super.getId());
-    }
-
-    @Override
     public String toString() {
-        String descriptionLength = "null";
-        if (super.getDescription() != null) descriptionLength = String.valueOf(super.getDescription().length());
-        return "Subtask{" +
-                "epicID=" + epicID +
-                ", title='" + super.getTitle() + '\'' +
-                ", description.length()=" + descriptionLength +
-                ", status=" + super.getStatus() +
-                ", id=" + super.getId() +
-                '}';
+        return getId() +
+                "," + getType() +
+                "," + getTitle() +
+                "," + getStatus() +
+                "," + getDescription() +
+                "," + getEpicID();
     }
 
     public int getEpicID() {

@@ -1,66 +1,50 @@
-import ru.yandex.javacourse.manager.InMemoryHistoryManager;
-import ru.yandex.javacourse.manager.InMemoryTaskManager;
-import ru.yandex.javacourse.manager.Managers;
+import ru.yandex.javacourse.manager.FileBackedTaskManager;
 import ru.yandex.javacourse.tasks.*;
 
-import java.util.ArrayList;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 public class Main {
 
     public static void main(String[] args) {
-        InMemoryTaskManager inMemoryTaskManager = (InMemoryTaskManager) Managers.getDefault();
+        Path tempFile = null;
+        try {
+            tempFile = Files.createTempFile("tempMain", ".csv");
+            tempFile.toFile().deleteOnExit();
+            String content = "0,TASK,Задача 1,NEW,Вот такая задача из файла\n" +
+                    "1,EPIC,Задача 2,DONE,Вот такая вторая задача из файла\n" +
+                    "2,SUBTASK,Задача 3,DONE,Вот такая третья задача из файла,1\n";
+            Files.write(tempFile, content.getBytes());
+        } catch (IOException e) {
+            System.out.println("Ошибка при создания временного файла для тестов: " + e.getMessage());
+        }
 
-        // Создаем три задачи
-        inMemoryTaskManager.addTask(new Task("Задача 1", "Вот такая задача", Status.NEW));
+        if (tempFile == null) {
+            System.out.println("Ошибка при создании временного файла");
+            return;
+        }
 
-        Task task2 = new Task("Задача 2", "Вот такая вторая задача", Status.IN_PROGRESS);
-        inMemoryTaskManager.addTask(task2);
+        FileBackedTaskManager fileBackedTaskManager = FileBackedTaskManager.loadFromFile(tempFile.toFile());
 
-        Task task3 = new Task("Задача 3", "Вот такая третья задача", Status.DONE);
-        inMemoryTaskManager.addTask(task3);
-
-        // Создаем эпик и сабтаски
-        Epic epic = new Epic("Задача Эпик", "Вот такой эпик", new ArrayList<>(), inMemoryTaskManager);
-        Subtask subtask1 = new Subtask("Задача сабтаск1", "Вот такой первый сабтаск", Status.NEW,
-                epic.getId());
-        Subtask subtask2 = new Subtask("Задача сабтаск2", "Вот такой второой сабтаск", Status.NEW,
-                epic.getId());
-
-        epic.addSubtask(subtask1.getId());
-        epic.addSubtask(subtask2.getId());
-        inMemoryTaskManager.addTask(epic);
-        inMemoryTaskManager.addTask(subtask1);
-        inMemoryTaskManager.addTask(subtask2);
-
-
-        // Используем геттеры и выводим таски
         System.out.println("Задачи:");
-        for (Task taskDefault : inMemoryTaskManager.getTasks()) {
+        for (Task taskDefault : fileBackedTaskManager.getTasks()) {
             System.out.println(taskDefault);
         }
         System.out.println("Эпики:");
-        for (Epic taskEpic : inMemoryTaskManager.getEpics()) {
+        for (Epic taskEpic : fileBackedTaskManager.getEpics()) {
             System.out.println(taskEpic);
 
-            System.out.println("  Подзадачи Эпика:");
-            for (Subtask task : inMemoryTaskManager.getEpicSubtasks(epic.getId())) {
+            System.out.println("  Подзадачи Эпика \"" + taskEpic.getTitle() + "\":");
+            for (Subtask task : fileBackedTaskManager.getEpicSubtasks(taskEpic.getId())) {
                 System.out.println("  --> " + task);
             }
         }
 
         System.out.println("Подзадачи:");
-        for (Task subtask : inMemoryTaskManager.getSubtasks()) {
+        for (Task subtask : fileBackedTaskManager.getSubtasks()) {
             System.out.println(subtask);
         }
 
-        // Проверка истории
-        System.out.println();
-        System.out.println("/////////////////////");
-        System.out.println("История");
-        InMemoryHistoryManager inMemoryHistoryManager = (InMemoryHistoryManager) inMemoryTaskManager.getInMemoryHistory();
-        ArrayList<Task> tasks = inMemoryHistoryManager.getTasks();
-        for (Task task : tasks) {
-            System.out.println(task);
-        }
     }
 }

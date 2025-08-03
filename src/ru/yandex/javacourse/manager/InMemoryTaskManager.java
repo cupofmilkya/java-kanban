@@ -124,12 +124,36 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void addTask(Task task) {
+        if (task == null) {
+            System.out.println("Ошибка: задача не может быть null");
+            return;
+        }
+
+        if (task instanceof Subtask) {
+            Subtask subtask = (Subtask) task;
+            int epicId = subtask.getEpicID();
+
+            if (!tasks.containsKey(epicId)) {
+                System.out.println("Ошибка: эпик с ID=" + epicId + " не найден");
+                return;
+            }
+
+            Task epic = tasks.get(epicId);
+            if (!(epic instanceof Epic)) {
+                System.out.println("Ошибка: задача с ID=" + epicId + " не является эпиком");
+                return;
+            }
+
+            ((Epic) epic).addSubtask(subtask.getId());
+        }
         tasks.put(task.getId(), task);
     }
 
     @Override
     public void addSubtasks(ArrayList<Subtask> tasks) {
-        if (tasks.isEmpty()) return;
+        if (tasks.isEmpty()) {
+            System.out.println("Пропущена строка (передан null)");
+        }
 
         for (Subtask task : tasks) {
             addTask(task);

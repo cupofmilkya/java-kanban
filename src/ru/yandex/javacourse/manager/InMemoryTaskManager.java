@@ -1,13 +1,24 @@
 package ru.yandex.javacourse.manager;
 
-import ru.yandex.javacourse.tasks.*;
+import ru.yandex.javacourse.exceptions.manager.TimeOverlapConflictException;
+import ru.yandex.javacourse.tasks.Epic;
+import ru.yandex.javacourse.tasks.Subtask;
+import ru.yandex.javacourse.tasks.Task;
 
-import java.util.HashMap;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.TreeSet;
 
 
 public class InMemoryTaskManager implements TaskManager {
     private final HashMap<Integer, Task> tasks;
+
+    private final TreeSet<Task> prioritizedTasks = new TreeSet<>(
+            Comparator.comparing(Task::getStartTime)
+    );
+
     final HistoryManager historyManager;
 
     public InMemoryTaskManager(HistoryManager historyManager) {
@@ -22,13 +33,11 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public Task getTask(int id) {
-        for (Task task : tasks.values()) {
-            if (task.getId() == id) {
-                historyManager.add(task);
-                return task;
-            }
+        Task task = tasks.get(id);
+        if (task != null) {
+            historyManager.add(task);
         }
-        return null;
+        return task;
     }
 
     public ArrayList<Task> getTasks() {
@@ -106,6 +115,8 @@ public class InMemoryTaskManager implements TaskManager {
                 }
             }
         }
+
+        prioritizedTasks.removeIf(task -> task.getId() == taskToRemove);
         tasks.remove(taskToRemove);
     }
 
@@ -129,6 +140,10 @@ public class InMemoryTaskManager implements TaskManager {
             return;
         }
 
+        if (hasTimeOverlap(task) && !task.getStartTime().isEqual(LocalDateTime.of(1, 1, 1, 0, 0))) {
+            throw new TimeOverlapConflictException("Задача пересекается по времени с существующими задачами");
+        }
+
         if (task instanceof Subtask) {
             Subtask subtask = (Subtask) task;
             int epicId = subtask.getEpicID();
@@ -146,6 +161,10 @@ public class InMemoryTaskManager implements TaskManager {
 
             ((Epic) epic).addSubtask(subtask.getId());
         }
+
+        if (!task.getStartTime().isEqual(LocalDateTime.of(1, 1, 1, 0, 0))) {
+            prioritizedTasks.add(task);
+        }
         tasks.put(task.getId(), task);
     }
 
@@ -162,5 +181,29 @@ public class InMemoryTaskManager implements TaskManager {
 
     public HistoryManager getInMemoryHistory() {
         return historyManager;
+    }
+
+
+    public TreeSet<Task> getPrioritizedTasks() {
+        return prioritizedTasks;
+    }
+
+    public boolean isPairOfTasksOverlap(Task task1, Task task2) {
+        if (task1 == null || task2 == null) return false;
+
+        LocalDateTime start1 = task1.getStartTime();
+        LocalDateTime end1 = task1.getEndTime();
+        LocalDateTime start2 = task2.getStartTime();
+        LocalDateTime end2 = task2.getEndTime();
+
+        return !(end1.isBefore(start2)) && !(end2.isBefore(start1));
+    }
+
+    public boolean hasTimeOverlap(Task newTask) {
+        if (newTask == null) return false;
+
+        return getAllTasks().values().stream()
+                .filter(task -> task.getId() != newTask.getId())
+                .anyMatch(existingTask -> isPairOfTasksOverlap(existingTask, newTask));
     }
 }

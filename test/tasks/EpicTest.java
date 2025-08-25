@@ -109,7 +109,7 @@ public class EpicTest {
         inMemoryTaskManager.addTask(sub2);
 
         assertEquals(time, epic.getStartTime(), "тест на старт");
-        assertEquals(time2.plus(duration), sub2.getEndTime(), "тест на конец сабтаска 2");
+        assertEquals(duration.plus(duration), epic.getDuration(), "тест на duration в эпике");
         assertEquals(sub2.getEndTime(), epic.getEndTime(), "тест на конец в эпике");
     }
 }

@@ -108,6 +108,12 @@ public class Epic extends Task {
         System.out.println("Подзадачи: " + subtasksIDs.toString());
     }
 
+    @Override
+    public Duration getDuration(){
+        updateDuration();
+        return super.getDuration();
+    }
+
     public void updateSubtaskStatus(int subtaskId, Status newStatus) {
         for (Task task : taskManager.getSubtasks()) {
             if (task.getId() == subtaskId) {
@@ -184,7 +190,13 @@ public class Epic extends Task {
                 .max(LocalDateTime::compareTo)
                 .orElse(start);
 
+        Duration duration = epicSubtasks.stream()
+                .map(Subtask::getDuration)
+                .filter(Objects::nonNull)
+                .reduce(Duration.ZERO, Duration::plus);
+
         super.setStartTime(start);
+        super.setDuration(duration);
         setEndTime(end);
     }
 }

@@ -72,7 +72,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
             throw new ManagerSaveException("Сохранение невозможно, нет пути для файла");
         }
         try (FileWriter writer = new FileWriter(filePath)) {
-            List<Task> tasksToWrite = new ArrayList<Task>(getTasks());
+            List<Task> tasksToWrite = new ArrayList<>(getTasks());
 
             for (Task task : tasksToWrite) {
                 writer.write(task.toString() + "\n");

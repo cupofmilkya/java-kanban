@@ -140,7 +140,8 @@ public class InMemoryTaskManager implements TaskManager {
             return;
         }
 
-        if (hasTimeOverlap(task) && !task.getStartTime().isEqual(LocalDateTime.of(1, 1, 1, 0, 0))) {
+        if (hasTimeOverlap(task) &&
+                !task.getStartTime().isEqual(LocalDateTime.of(1, 1, 1, 0, 0))) {
             throw new TimeOverlapConflictException("Задача пересекается по времени с существующими задачами");
         }
 

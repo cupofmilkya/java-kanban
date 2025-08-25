@@ -1,5 +1,7 @@
 package ru.yandex.javacourse.tasks;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class TaskConvertor {
@@ -9,15 +11,17 @@ public class TaskConvertor {
         try {
             if (parts.length < 5) {
                 System.out.println("Ошибка в строке: не хватает данных. Строка: " + String.join(",", parts));
-                return null;
+                return null; //todo Класс Optional
             }
 
             switch (parts[1]) {
                 case "TASK" -> {
-                    return new Task(parts[2], parts[4], Status.valueOf(parts[3]), Integer.parseInt(parts[0]));
+                    return new Task(parts[2], parts[4], Status.valueOf(parts[3]), Integer.parseInt(parts[0]),
+                            Duration.parse(parts[6]), LocalDateTime.parse(parts[5]));
                 }
                 case "EPIC" -> {
-                    return new Epic(parts[2], parts[4], new ArrayList<Integer>(), Integer.parseInt(parts[0]));
+                    return new Epic(parts[2], parts[4], new ArrayList<Integer>(), Integer.parseInt(parts[0]),
+                            Duration.parse(parts[6]), LocalDateTime.parse(parts[5]));
                 }
                 case "SUBTASK" -> {
                     if (parts.length < 6) {
@@ -26,7 +30,7 @@ public class TaskConvertor {
                         return null;
                     }
                     return new Subtask(parts[2], parts[4], Status.valueOf(parts[3]), Integer.parseInt(parts[5]),
-                            Integer.parseInt(parts[0]));
+                            Integer.parseInt(parts[0]), Duration.parse(parts[7]), LocalDateTime.parse(parts[6]));
                 }
                 default -> {
                     System.out.println("Неизвестный тип задачи: " + parts[1] + ". Строка: " +

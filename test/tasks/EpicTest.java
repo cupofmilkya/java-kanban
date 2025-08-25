@@ -9,6 +9,8 @@ import ru.yandex.javacourse.tasks.Epic;
 import ru.yandex.javacourse.tasks.Status;
 import ru.yandex.javacourse.tasks.Subtask;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -86,5 +88,28 @@ public class EpicTest {
         inMemoryTaskManager.addTask(epic);
 
         assertNotEquals(epic, epic1);
+    }
+
+    @Test
+    @DisplayName("Проверка на корректность работы getEndTime в Task")
+    public void epicCorrectlyReturnEndTimeTest() {
+        LocalDateTime time = LocalDateTime.of(2025, 1, 1, 0, 0);
+        Duration duration = Duration.ofMinutes(10);
+        LocalDateTime time2 = time.plus(duration).plusMinutes(5);
+
+        Epic epic = new Epic("Epic", "Epic description", new ArrayList<>(), inMemoryTaskManager);
+        inMemoryTaskManager.addTask(epic);
+
+        Subtask sub = new Subtask("Subtask 1", "Subtask description", Status.NEW, epic.getId(),
+                duration, time);
+        inMemoryTaskManager.addTask(sub);
+
+        Subtask sub2 = new Subtask("Subtask 2", "Subtask description", Status.NEW, epic.getId(),
+                duration, time2);
+        inMemoryTaskManager.addTask(sub2);
+
+        assertEquals(time, epic.getStartTime(), "тест на старт");
+        assertEquals(duration.plus(duration), epic.getDuration(), "тест на duration в эпике");
+        assertEquals(sub2.getEndTime(), epic.getEndTime(), "тест на конец в эпике");
     }
 }

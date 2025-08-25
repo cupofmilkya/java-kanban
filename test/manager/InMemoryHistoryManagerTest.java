@@ -64,5 +64,4 @@ public class InMemoryHistoryManagerTest {
 
         assertNull(inMemoryHistoryManager.getTask(task1.getId()));
     }
-
 }

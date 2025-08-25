@@ -13,6 +13,8 @@ import ru.yandex.javacourse.tasks.Status;
 import ru.yandex.javacourse.tasks.Subtask;
 import ru.yandex.javacourse.tasks.Task;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 
@@ -63,8 +65,21 @@ public class InMemoryTaskManagerTest {
 
     @Test
     @DisplayName("Проверка на неизменяемость задачи при добавлении в inMemoryTaskManager")
-    public void equalsOfTask_And_TaskInInMemoryTaskManager() {
+    public void equalsOfTask_And_TaskInInMemoryTaskManagerTest() {
         Task task = new Task("Task", "Task description", Status.NEW);
+        inMemoryTaskManager.addTask(task);
+
+        assertEquals(task, inMemoryTaskManager.getTask(task.getId()));
+    }
+
+    @Test
+    @DisplayName("Проверка на TimeOverlapConflict в inMemoryTaskManager")
+    public void TimeOverlapConflictTest() {
+        LocalDateTime time = LocalDateTime.now();
+        Duration duration = Duration.ofMinutes(45);
+        LocalDateTime endTime = time.plus(duration);
+
+        Task task = new Task("Task", "Task description", Status.NEW, duration, time);
         inMemoryTaskManager.addTask(task);
 
         assertEquals(task, inMemoryTaskManager.getTask(task.getId()));

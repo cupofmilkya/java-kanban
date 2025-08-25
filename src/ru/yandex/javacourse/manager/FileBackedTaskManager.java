@@ -1,12 +1,14 @@
 package ru.yandex.javacourse.manager;
 
 import ru.yandex.javacourse.exceptions.manager.ManagerSaveException;
-import ru.yandex.javacourse.tasks.*;
+import ru.yandex.javacourse.tasks.Epic;
+import ru.yandex.javacourse.tasks.Subtask;
+import ru.yandex.javacourse.tasks.Task;
+import ru.yandex.javacourse.tasks.TaskConvertor;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
-
 
 public class FileBackedTaskManager extends InMemoryTaskManager {
     String filePath;
@@ -70,7 +72,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
             throw new ManagerSaveException("Сохранение невозможно, нет пути для файла");
         }
         try (FileWriter writer = new FileWriter(filePath)) {
-            List<Task> tasksToWrite = new ArrayList<Task>(getTasks());
+            List<Task> tasksToWrite = new ArrayList<>(getTasks());
 
             for (Task task : tasksToWrite) {
                 writer.write(task.toString() + "\n");

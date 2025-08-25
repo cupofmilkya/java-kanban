@@ -6,6 +6,7 @@ import ru.yandex.javacourse.tasks.Task;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.TreeSet;
 
 public interface TaskManager {
     HashMap<Integer, Task> getAllTasks();
@@ -31,4 +32,6 @@ public interface TaskManager {
     void addTask(Task task);
 
     void addSubtasks(ArrayList<Subtask> tasks);
+
+    TreeSet<Task> getPrioritizedTasks();
 }

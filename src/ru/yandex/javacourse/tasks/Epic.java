@@ -109,7 +109,7 @@ public class Epic extends Task {
     }
 
     @Override
-    public Duration getDuration(){
+    public Duration getDuration() {
         updateDuration();
         return super.getDuration();
     }

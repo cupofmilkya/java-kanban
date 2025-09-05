@@ -9,7 +9,7 @@ public class Task {
     private String description;
     private Status status;
     private static int count = 0;
-    private final int id;
+    private Integer id;
     private Duration duration;
     private LocalDateTime startTime;
 
@@ -59,7 +59,11 @@ public class Task {
         return description;
     }
 
-    public int getId() {
+    public void setId() {
+        id = count++;
+    }
+
+    public Integer getId() {
         return id;
     }
 

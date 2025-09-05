@@ -145,6 +145,10 @@ public class InMemoryTaskManager implements TaskManager {
             throw new TimeOverlapConflictException("Задача пересекается по времени с существующими задачами");
         }
 
+        if (task.getId() == null) {
+            task.setId();
+        }
+
         if (task instanceof Subtask) {
             Subtask subtask = (Subtask) task;
             int epicId = subtask.getEpicID();
@@ -167,6 +171,21 @@ public class InMemoryTaskManager implements TaskManager {
             prioritizedTasks.add(task);
         }
         tasks.put(task.getId(), task);
+    }
+
+    @Override
+    public void updateTask(Task task) {
+        if (!tasks.containsKey(task.getId())) {
+            return;
+        }
+
+        Task taskToUpdate = tasks.get(task.getId());
+
+        taskToUpdate.setTitle(task.getTitle());
+        taskToUpdate.setDescription(task.getDescription());
+        taskToUpdate.setStatus(task.getStatus());
+        taskToUpdate.setDuration(task.getDuration());
+        taskToUpdate.setStartTime(task.getStartTime());
     }
 
     @Override

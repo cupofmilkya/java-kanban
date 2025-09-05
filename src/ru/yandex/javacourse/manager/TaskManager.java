@@ -29,6 +29,8 @@ public interface TaskManager {
 
     void showTasks();
 
+    void updateTask(Task task);
+
     void addTask(Task task);
 
     void addSubtasks(ArrayList<Subtask> tasks);

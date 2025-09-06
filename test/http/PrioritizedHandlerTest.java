@@ -41,7 +41,7 @@ public class PrioritizedHandlerTest {
 
     @Test
     @DisplayName("Проверка на получение задачи через HTTP")
-    public void getTaskHttpTest() throws IOException, InterruptedException {
+    public void getPrioritizedHttpTest() throws IOException, InterruptedException {
         Task task = new Task("Task", "Description", Status.NEW,
                 Duration.ofMinutes(45), LocalDateTime.now().minusDays(100));
         manager.addTask(task);

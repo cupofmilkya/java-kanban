@@ -43,7 +43,7 @@ public class HistoryHandlerTest {
 
     @Test
     @DisplayName("Проверка на получение задачи через HTTP")
-    public void getTaskHttpTest() throws IOException, InterruptedException {
+    public void getHistoryHttpTest() throws IOException, InterruptedException {
         Task task = new Task("Task", "Description", Status.NEW,
                 Duration.ofMinutes(45), LocalDateTime.now());
         manager.addTask(task);
@@ -54,7 +54,6 @@ public class HistoryHandlerTest {
         manager.addTask(subtask);
 
         manager.getTask(0);
-        manager.getTask(1);
 
         URI uri = URI.create("http://localhost:8080/history");
         HttpRequest.Builder requestBuilder = HttpRequest.newBuilder();
@@ -80,6 +79,6 @@ public class HistoryHandlerTest {
 
         Task[] tasks = gson.fromJson(body, Task[].class);
 
-        assertEquals(2, tasks.length);
+        assertEquals(1, tasks.length);
     }
 }

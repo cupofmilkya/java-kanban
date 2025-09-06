@@ -165,6 +165,8 @@ public class InMemoryTaskManager implements TaskManager {
             }
 
             ((Epic) epic).addSubtask(subtask.getId());
+
+            prioritizedTasks.add(epic);
         }
 
         if (!task.getStartTime().isEqual(LocalDateTime.of(1, 1, 1, 0, 0))) {
@@ -199,6 +201,7 @@ public class InMemoryTaskManager implements TaskManager {
         }
     }
 
+    @Override
     public HistoryManager getInMemoryHistory() {
         return historyManager;
     }

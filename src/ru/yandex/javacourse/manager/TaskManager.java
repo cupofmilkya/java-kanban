@@ -35,5 +35,7 @@ public interface TaskManager {
 
     void addSubtasks(ArrayList<Subtask> tasks);
 
+    HistoryManager getInMemoryHistory();
+
     TreeSet<Task> getPrioritizedTasks();
 }

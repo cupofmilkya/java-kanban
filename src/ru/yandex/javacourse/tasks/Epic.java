@@ -11,13 +11,22 @@ import java.util.stream.Collectors;
 
 public class Epic extends Task {
     private ArrayList<Integer> subtasksIDs;
-    private TaskManager taskManager;
+    private transient TaskManager taskManager;
     private LocalDateTime endTime;
 
     public Epic(String title, String description, ArrayList<Integer> subtasksIDs,
                 TaskManager taskManager) {
         super(title, description, Status.NEW);
         this.subtasksIDs = subtasksIDs;
+        this.taskManager = taskManager;
+        updateStatus();
+        updateDuration();
+    }
+
+    public Epic(String title, String description,
+                TaskManager taskManager) {
+        super(title, description, Status.NEW);
+        this.subtasksIDs = new ArrayList<>();
         this.taskManager = taskManager;
         updateStatus();
         updateDuration();

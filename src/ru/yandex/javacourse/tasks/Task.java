@@ -63,6 +63,10 @@ public class Task {
         id = count++;
     }
 
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
     public Integer getId() {
         return id;
     }

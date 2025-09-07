@@ -38,7 +38,6 @@ public class InMemoryTaskManagerTest {
         inMemoryTaskManager.addTask(epic);
 
         Subtask subtask = new Subtask("Subtask", "Subtask description", Status.NEW, epic.getId());
-        epic.addSubtask(subtask.getId());
         inMemoryTaskManager.addTask(subtask);
 
         assertEquals(task, inMemoryTaskManager.getTask(task.getId()));

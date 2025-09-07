@@ -159,7 +159,7 @@ public class Epic extends Task {
                     try {
                         return taskManager.getTask(id);
                     } catch (NotFoundException e) {
-                        throw new RuntimeException(e);
+                        return null;
                     }
                 })
                 .filter(task -> task instanceof Subtask)
@@ -171,7 +171,7 @@ public class Epic extends Task {
                     try {
                         return taskManager.getTask(id);
                     } catch (NotFoundException e) {
-                        throw new RuntimeException(e);
+                        return null;
                     }
                 })
                 .filter(task -> task instanceof Subtask)
@@ -194,7 +194,7 @@ public class Epic extends Task {
                     try {
                         return taskManager.getTask(id);
                     } catch (NotFoundException e) {
-                        throw new RuntimeException(e);
+                        return null;
                     }
                 })
                 .filter(task -> task instanceof Subtask)

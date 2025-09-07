@@ -53,7 +53,7 @@ public class HistoryHandlerTest {
                 Status.IN_PROGRESS, epic.getId(), Duration.ofMinutes(25), LocalDateTime.now().plusMinutes(150));
         manager.addTask(subtask);
 
-        manager.getTask(0);
+        manager.getTask(task.getId());
 
         URI uri = URI.create("http://localhost:8080/history");
         HttpRequest.Builder requestBuilder = HttpRequest.newBuilder();

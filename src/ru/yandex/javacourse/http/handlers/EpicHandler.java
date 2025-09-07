@@ -5,18 +5,14 @@ import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import ru.yandex.javacourse.exceptions.manager.NotFoundException;
 import ru.yandex.javacourse.exceptions.manager.TimeOverlapConflictException;
-import ru.yandex.javacourse.http.adapters.LocalDateTimeAdapter;
 import ru.yandex.javacourse.manager.TaskManager;
 import ru.yandex.javacourse.tasks.Epic;
-import ru.yandex.javacourse.http.adapters.DurationAdapter;
 import ru.yandex.javacourse.tasks.Subtask;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
-import java.time.Duration;
-import java.time.LocalDateTime;
 
 public class EpicHandler extends BaseHttpHandler implements HttpHandler {
     private final TaskManager manager;

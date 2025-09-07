@@ -1,5 +1,6 @@
 package ru.yandex.javacourse.manager;
 
+import ru.yandex.javacourse.exceptions.manager.NotFoundException;
 import ru.yandex.javacourse.exceptions.manager.TimeOverlapConflictException;
 import ru.yandex.javacourse.tasks.Epic;
 import ru.yandex.javacourse.tasks.Subtask;
@@ -32,11 +33,12 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public Task getTask(int id) {
+    public Task getTask(int id) throws NotFoundException {
         Task task = tasks.get(id);
-        if (task != null) {
-            historyManager.add(task);
+        if (task == null) {
+            throw new NotFoundException("Задача с ID " + id + " не найдена");
         }
+        historyManager.add(task);
         return task;
     }
 
@@ -145,6 +147,10 @@ public class InMemoryTaskManager implements TaskManager {
             throw new TimeOverlapConflictException("Задача пересекается по времени с существующими задачами");
         }
 
+        if (task.getId() == null) {
+            task.setId();
+        }
+
         if (task instanceof Subtask) {
             Subtask subtask = (Subtask) task;
             int epicId = subtask.getEpicID();
@@ -161,12 +167,29 @@ public class InMemoryTaskManager implements TaskManager {
             }
 
             ((Epic) epic).addSubtask(subtask.getId());
+
+            prioritizedTasks.add(epic);
         }
 
         if (!task.getStartTime().isEqual(LocalDateTime.of(1, 1, 1, 0, 0))) {
             prioritizedTasks.add(task);
         }
         tasks.put(task.getId(), task);
+    }
+
+    @Override
+    public void updateTask(Task task) {
+        if (!tasks.containsKey(task.getId())) {
+            return;
+        }
+
+        Task taskToUpdate = tasks.get(task.getId());
+
+        taskToUpdate.setTitle(task.getTitle());
+        taskToUpdate.setDescription(task.getDescription());
+        taskToUpdate.setStatus(task.getStatus());
+        taskToUpdate.setDuration(task.getDuration());
+        taskToUpdate.setStartTime(task.getStartTime());
     }
 
     @Override
@@ -180,6 +203,7 @@ public class InMemoryTaskManager implements TaskManager {
         }
     }
 
+    @Override
     public HistoryManager getInMemoryHistory() {
         return historyManager;
     }

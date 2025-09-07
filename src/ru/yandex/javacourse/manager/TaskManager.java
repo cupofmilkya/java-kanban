@@ -1,5 +1,6 @@
 package ru.yandex.javacourse.manager;
 
+import ru.yandex.javacourse.exceptions.manager.NotFoundException;
 import ru.yandex.javacourse.tasks.Epic;
 import ru.yandex.javacourse.tasks.Subtask;
 import ru.yandex.javacourse.tasks.Task;
@@ -12,7 +13,7 @@ public interface TaskManager {
     HashMap<Integer, Task> getAllTasks();
 
 
-    Task getTask(int id);
+    Task getTask(int id) throws NotFoundException;
 
     ArrayList<Task> getTasks();
 
@@ -29,9 +30,13 @@ public interface TaskManager {
 
     void showTasks();
 
+    void updateTask(Task task);
+
     void addTask(Task task);
 
     void addSubtasks(ArrayList<Subtask> tasks);
+
+    HistoryManager getInMemoryHistory();
 
     TreeSet<Task> getPrioritizedTasks();
 }

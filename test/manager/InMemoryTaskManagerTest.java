@@ -6,6 +6,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import ru.yandex.javacourse.exceptions.manager.NotFoundException;
 import ru.yandex.javacourse.manager.InMemoryTaskManager;
 import ru.yandex.javacourse.manager.Managers;
 import ru.yandex.javacourse.tasks.Epic;
@@ -29,15 +30,14 @@ public class InMemoryTaskManagerTest {
     @Test
     @DisplayName("Проверка на возможность добавления задач различных типов в inMemoryTaskManager и их корректного " +
             "поиска по Id")
-    public void thatInMemoryTaskManager_CorrectlyAddsDifferentTaskTypes_And_CanFindThemByIdTest() {
+    public void thatInMemoryTaskManager_CorrectlyAddsDifferentTaskTypes_And_CanFindThemByIdTest() throws NotFoundException {
         Task task = new Task("Task", "Task description", Status.NEW);
         inMemoryTaskManager.addTask(task);
 
-        Epic epic = new Epic("Epic", "Epic description", new ArrayList<Integer>(), inMemoryTaskManager);
+        Epic epic = new Epic("Epic", "Epic description", new ArrayList<>(), inMemoryTaskManager);
         inMemoryTaskManager.addTask(epic);
 
         Subtask subtask = new Subtask("Subtask", "Subtask description", Status.NEW, epic.getId());
-        epic.addSubtask(subtask.getId());
         inMemoryTaskManager.addTask(subtask);
 
         assertEquals(task, inMemoryTaskManager.getTask(task.getId()));
@@ -65,7 +65,7 @@ public class InMemoryTaskManagerTest {
 
     @Test
     @DisplayName("Проверка на неизменяемость задачи при добавлении в inMemoryTaskManager")
-    public void equalsOfTask_And_TaskInInMemoryTaskManagerTest() {
+    public void equalsOfTask_And_TaskInInMemoryTaskManagerTest() throws NotFoundException {
         Task task = new Task("Task", "Task description", Status.NEW);
         inMemoryTaskManager.addTask(task);
 
@@ -74,7 +74,7 @@ public class InMemoryTaskManagerTest {
 
     @Test
     @DisplayName("Проверка на TimeOverlapConflict в inMemoryTaskManager")
-    public void TimeOverlapConflictTest() {
+    public void TimeOverlapConflictTest() throws NotFoundException {
         LocalDateTime time = LocalDateTime.now();
         Duration duration = Duration.ofMinutes(45);
         LocalDateTime endTime = time.plus(duration);

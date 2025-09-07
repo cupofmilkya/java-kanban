@@ -3,6 +3,7 @@ package manager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import ru.yandex.javacourse.exceptions.manager.NotFoundException;
 import ru.yandex.javacourse.manager.FileBackedTaskManager;
 import ru.yandex.javacourse.tasks.*;
 
@@ -58,7 +59,7 @@ public class FileBackedTaskManagerTest {
 
     @Test
     @DisplayName("Проверка на корректное сохранение данных и их состояний в файле в FileBackedTaskManager")
-    public void thatFileBackedTaskManagerTest_CorrectlyContainsDifferentTaskTypes() {
+    public void thatFileBackedTaskManagerTest_CorrectlyContainsDifferentTaskTypes() throws NotFoundException {
         FileBackedTaskManager fileBackedTaskManager = FileBackedTaskManager.loadFromFile(tempFile.toFile());
 
         Task task = new Task("Задача для сохранения", "Описание новой задачи", Status.NEW);

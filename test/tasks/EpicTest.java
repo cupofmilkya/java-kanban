@@ -3,6 +3,7 @@ package tasks;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import ru.yandex.javacourse.exceptions.manager.NotFoundException;
 import ru.yandex.javacourse.manager.InMemoryTaskManager;
 import ru.yandex.javacourse.manager.Managers;
 import ru.yandex.javacourse.tasks.Epic;
@@ -27,7 +28,7 @@ public class EpicTest {
     @Test
     @DisplayName("Проверка работы получения статуса Эпика при обновлении статусов его сабтасков")
     public void epicUpdateStatusTest() {
-        Epic epic = new Epic("Epic1", "Epic description", new ArrayList<Integer>(), inMemoryTaskManager);
+        Epic epic = new Epic("Epic1", "Epic description", new ArrayList<>(), inMemoryTaskManager);
         Subtask subtask = new Subtask("Subtask", "Subtask description", Status.NEW, epic.getId());
         Subtask subtask1 = new Subtask("Subtask", "Subtask description", Status.NEW, epic.getId());
         epic.addSubtask(subtask.getId());
@@ -52,7 +53,7 @@ public class EpicTest {
     @Test
     @DisplayName("Проверка работы получения статуса Эпика при обновлении статусов его сабтасков")
     public void epicAddSubtaskTest() {
-        Epic epic = new Epic("Epic", "Epic description", new ArrayList<Integer>(), inMemoryTaskManager);
+        Epic epic = new Epic("Epic", "Epic description", new ArrayList<>(), inMemoryTaskManager);
         Subtask subtask = new Subtask("Subtask", "Subtask description", Status.NEW, epic.getId());
         epic.addSubtask(subtask.getId());
 
@@ -62,19 +63,19 @@ public class EpicTest {
     @Test
     @DisplayName("Проверка на невозможность добавления Эпика себя в свои Сабтаски")
     public void inabilityToAddAnEpicToOneselfTest() {
-        Epic epic = new Epic("Epic", "Epic description", new ArrayList<Integer>(), inMemoryTaskManager);
+        Epic epic = new Epic("Epic", "Epic description", new ArrayList<>(), inMemoryTaskManager);
         inMemoryTaskManager.addTask(epic);
         epic.addSubtask(epic.getId());
 
-        ArrayList<Integer> expected = new ArrayList<Integer>();
+        ArrayList<Integer> expected = new ArrayList<>();
 
         assertEquals(expected, epic.getSubtasksIDs());
     }
 
     @Test
     @DisplayName("Проверка на равенство задач типов Epic при одинаковом Id")
-    public void equalsOfEpicWithTheSameIdTest() {
-        Epic epic = new Epic("Epic", "Epic description", new ArrayList<Integer>(), inMemoryTaskManager);
+    public void equalsOfEpicWithTheSameIdTest() throws NotFoundException {
+        Epic epic = new Epic("Epic", "Epic description", new ArrayList<>(), inMemoryTaskManager);
         inMemoryTaskManager.addTask(epic);
 
         assertEquals(epic, inMemoryTaskManager.getTask(epic.getId()));
@@ -83,8 +84,8 @@ public class EpicTest {
     @Test
     @DisplayName("Проверка на неравенство задач типов Epic при разном Id")
     public void notEqualsOfEpicWithTheSameIdTest() {
-        Epic epic = new Epic("Epic", "Epic description", new ArrayList<Integer>(), inMemoryTaskManager);
-        Epic epic1 = new Epic("Epic", "Epic description", new ArrayList<Integer>(), inMemoryTaskManager);
+        Epic epic = new Epic("Epic", "Epic description", new ArrayList<>(), inMemoryTaskManager);
+        Epic epic1 = new Epic("Epic", "Epic description", new ArrayList<>(), inMemoryTaskManager);
         inMemoryTaskManager.addTask(epic);
 
         assertNotEquals(epic, epic1);

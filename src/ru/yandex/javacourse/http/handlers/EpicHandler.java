@@ -3,6 +3,7 @@ package ru.yandex.javacourse.http.handlers;
 import com.google.gson.*;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
+import ru.yandex.javacourse.exceptions.manager.NotFoundException;
 import ru.yandex.javacourse.exceptions.manager.TimeOverlapConflictException;
 import ru.yandex.javacourse.http.adapters.LocalDateTimeAdapter;
 import ru.yandex.javacourse.manager.TaskManager;
@@ -38,11 +39,7 @@ public class EpicHandler extends BaseHttpHandler implements HttpHandler {
                     if (paths[1].equals("epics") && paths.length == 2) {
                         Epic[] tasks = manager.getEpics().toArray(new Epic[0]);
 
-                        Gson gson = new GsonBuilder()
-                                .registerTypeAdapter(Duration.class, new DurationAdapter())
-                                .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
-                                .create();
-                        String json = gson.toJson(tasks);
+                        String json = getGson().toJson(tasks);
 
                         super.sendText(httpExchange, json);
                     } else if (paths[1].equals("epics") && paths.length == 3) {
@@ -50,20 +47,13 @@ public class EpicHandler extends BaseHttpHandler implements HttpHandler {
                             int id = Integer.parseInt(paths[2]);
                             Epic task = (Epic) manager.getTask(id);
 
-                            if (task == null) {
-                                super.sendNotFound(httpExchange);
-                                return;
-                            }
-
-                            Gson gson = new GsonBuilder()
-                                    .registerTypeAdapter(Duration.class, new DurationAdapter())
-                                    .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
-                                    .create();
-                            String json = gson.toJson(task);
+                            String json = getGson().toJson(task);
 
                             super.sendText(httpExchange, json);
                         } catch (NumberFormatException e) {
                             httpExchange.sendResponseHeaders(400, -1);
+                        } catch (NotFoundException e) {
+                            super.sendNotFound(httpExchange);
                         }
                     } else if (paths[1].equals("epics") && paths.length == 4 && paths[3].equals("subtasks")) {
                         try {
@@ -71,11 +61,7 @@ public class EpicHandler extends BaseHttpHandler implements HttpHandler {
 
                             Subtask[] tasks = manager.getEpicSubtasks(id).toArray(new Subtask[0]);
 
-                            Gson gson = new GsonBuilder()
-                                    .registerTypeAdapter(Duration.class, new DurationAdapter())
-                                    .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
-                                    .create();
-                            String json = gson.toJson(tasks);
+                            String json = getGson().toJson(tasks);
 
                             super.sendText(httpExchange, json);
                         } catch (NumberFormatException e) {
@@ -89,12 +75,6 @@ public class EpicHandler extends BaseHttpHandler implements HttpHandler {
                     if (paths[1].equals("epics") && paths.length == 2) {
                         try (InputStream is = httpExchange.getRequestBody()) {
                             String body = new String(is.readAllBytes(), StandardCharsets.UTF_8);
-
-                            Gson gson = new GsonBuilder()
-                                    .registerTypeAdapter(Duration.class, new DurationAdapter())
-                                    .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
-                                    .serializeNulls()
-                                    .create();
 
                             JsonObject obj = JsonParser.parseString(body).getAsJsonObject();
 
@@ -120,15 +100,13 @@ public class EpicHandler extends BaseHttpHandler implements HttpHandler {
                                     manager.addTask(epic);
                                     httpExchange.sendResponseHeaders(201, -1);
                                 } else {
-                                    if (manager.getTask(epic.getId()) == null) {
-                                        httpExchange.sendResponseHeaders(404, -1);
-                                    } else {
-                                        manager.updateTask(epic);
-                                        httpExchange.sendResponseHeaders(200, -1);
-                                    }
+                                    manager.updateTask(epic);
+                                    httpExchange.sendResponseHeaders(200, -1);
                                 }
                             } catch (TimeOverlapConflictException e) {
                                 super.sendHasOverlaps(httpExchange);
+                            } catch (NotFoundException e) {
+                                super.sendNotFound(httpExchange);
                             }
                         } catch (Exception e) {
                             httpExchange.sendResponseHeaders(500, -1);
@@ -142,11 +120,6 @@ public class EpicHandler extends BaseHttpHandler implements HttpHandler {
                         try {
                             int id = Integer.parseInt(paths[2]);
 
-                            if (manager.getTask(id) == null) {
-                                super.sendNotFound(httpExchange);
-                                return;
-                            }
-
                             manager.removeTask(id);
 
                             String json = "Задача с id " + id + " успешно удалена.";
@@ -154,6 +127,8 @@ public class EpicHandler extends BaseHttpHandler implements HttpHandler {
                             super.sendText(httpExchange, json);
                         } catch (NumberFormatException e) {
                             httpExchange.sendResponseHeaders(400, -1);
+                        } catch (NotFoundException e) {
+                            super.sendNotFound(httpExchange);
                         }
                     }
                 }

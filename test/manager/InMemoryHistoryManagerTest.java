@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import ru.yandex.javacourse.exceptions.manager.NotFoundException;
 import ru.yandex.javacourse.manager.InMemoryHistoryManager;
 import ru.yandex.javacourse.manager.InMemoryTaskManager;
 import ru.yandex.javacourse.manager.Managers;
@@ -25,7 +26,7 @@ public class InMemoryHistoryManagerTest {
 
     @Test
     @DisplayName("Проверка на неналичие повторных просмотров в истории InMemoryHistoryManager")
-    public void taskMustNotBeSaved_moreThanOnce_Test() {
+    public void taskMustNotBeSaved_moreThanOnce_Test() throws NotFoundException {
         Task task = new Task("Task", "Task description", Status.NEW);
         inMemoryTaskManager.addTask(task);
 
@@ -50,7 +51,7 @@ public class InMemoryHistoryManagerTest {
         inMemoryHistoryManager.linkLast(task3);
 
         assertEquals(inMemoryHistoryManager.getTask(task1.getId()), task1);
-        assertEquals(inMemoryHistoryManager.size(), 3);
+        assertEquals(3, inMemoryHistoryManager.size());
     }
 
     @Test

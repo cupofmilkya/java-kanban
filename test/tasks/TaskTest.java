@@ -3,6 +3,7 @@ package tasks;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import ru.yandex.javacourse.exceptions.manager.NotFoundException;
 import ru.yandex.javacourse.manager.InMemoryTaskManager;
 import ru.yandex.javacourse.manager.Managers;
 import ru.yandex.javacourse.tasks.Status;
@@ -23,7 +24,7 @@ public class TaskTest {
 
     @Test
     @DisplayName("Проверка на равенство задач типа Task при одинаковом Id")
-    public void equalsTasksWithSameIdTest() {
+    public void equalsTasksWithSameIdTest() throws NotFoundException {
         Task task = new Task("Task", "Task description", Status.NEW);
         inMemoryTaskManager.addTask(task);
 
@@ -35,7 +36,7 @@ public class TaskTest {
 
     @Test
     @DisplayName("Проверка на неравенство задач типа Task при разном Id")
-    public void notEqualsTasksWithSameIdTest() {
+    public void notEqualsTasksWithSameIdTest() throws NotFoundException {
         Task task = new Task("Task", "Task description", Status.NEW);
         inMemoryTaskManager.addTask(task);
 

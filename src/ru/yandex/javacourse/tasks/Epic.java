@@ -1,5 +1,6 @@
 package ru.yandex.javacourse.tasks;
 
+import ru.yandex.javacourse.exceptions.manager.NotFoundException;
 import ru.yandex.javacourse.manager.TaskManager;
 
 import java.time.Duration;
@@ -152,17 +153,31 @@ public class Epic extends Task {
             return;
         }
 
+
         newCount = (int) subtasksIDs.stream()
-                .map(id -> taskManager.getTask(id))
+                .map(id -> {
+                    try {
+                        return taskManager.getTask(id);
+                    } catch (NotFoundException e) {
+                        throw new RuntimeException(e);
+                    }
+                })
                 .filter(task -> task instanceof Subtask)
                 .filter(task -> task.getStatus() == Status.NEW)
                 .count();
 
         doneCount = (int) subtasksIDs.stream()
-                .map(id -> taskManager.getTask(id))
+                .map(id -> {
+                    try {
+                        return taskManager.getTask(id);
+                    } catch (NotFoundException e) {
+                        throw new RuntimeException(e);
+                    }
+                })
                 .filter(task -> task instanceof Subtask)
                 .filter(task -> task.getStatus() == Status.DONE)
                 .count();
+
 
         if (newCount == subtasksIDs.size()) {
             super.setStatus(Status.NEW);
@@ -175,7 +190,13 @@ public class Epic extends Task {
 
     private void updateDuration() {
         List<Subtask> epicSubtasks = subtasksIDs.stream()
-                .map(id -> taskManager.getTask(id))
+                .map(id -> {
+                    try {
+                        return taskManager.getTask(id);
+                    } catch (NotFoundException e) {
+                        throw new RuntimeException(e);
+                    }
+                })
                 .filter(task -> task instanceof Subtask)
                 .map(task -> (Subtask) task)
                 .collect(Collectors.toList());

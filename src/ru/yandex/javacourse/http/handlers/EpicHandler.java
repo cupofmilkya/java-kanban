@@ -135,7 +135,6 @@ public class EpicHandler extends BaseHttpHandler implements HttpHandler {
         } catch (NumberFormatException e) {
             super.sendNotFound(httpExchange);
         } catch (Exception e) {
-
             httpExchange.sendResponseHeaders(500, -1);
         }
     }
